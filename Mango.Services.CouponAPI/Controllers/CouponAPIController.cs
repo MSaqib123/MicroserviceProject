@@ -11,24 +11,28 @@ namespace Mango.Services.CouponAPI.Controllers
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
+        private ResponseDto _response;
         
         public CouponAPIController(AppDbContext db)
         {
             _db = db;
+            _response = new ResponseDto();
         }
 
 
         [HttpGet]
-        public object Get()
+        public ResponseDto Get()
         {
             try
             {
                 IEnumerable<Coupon> objList = _db.Coupons.ToList();
-                return objList;
+                _response.Result = objList;
+                return _response;
             }
             catch (Exception ex)
             {
-                throw;
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
             }
             return null;
         }
@@ -41,11 +45,13 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 IEnumerable<Coupon> objList = _db.Coupons.ToList().Where(x=>x.CouponId == id);
-                return objList;
+                _response.Result = objList;
+                return _response;
             }
             catch (Exception ex)
             {
-                throw;
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
             }
             return null;
         }
