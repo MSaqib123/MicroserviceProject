@@ -5,8 +5,9 @@ namespace Mango.Web.Models
 {
     public class RequestDto
     {
-        public ApiType Result { get; set; } = ApiType.GET;
-        public bool IsSuccess { get; set; } = true;
-        public string Message { get; set; } = "";
+        public ApiType ApiType { get; set; } = ApiType.GET;
+        public string Url { get; set; }
+        public object Data { get; set; }
+        public string AccessToken { get; set; } = "";
     }
 }
