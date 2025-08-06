@@ -25,12 +25,20 @@ namespace Mango.Web.Service
 
         public async Task<ResponseDto?> DeleteCouponsAsync(int id)
         {
-            var Request = new RequestDto()
+            try
             {
-                ApiType = SD.ApiType.DELETE,
-                Url = SD.CouponAPIBase + "/api/coupon/" + id
-            };
-            return await _baseService.SendAsync(Request);
+                var Request = new RequestDto()
+                {
+                    ApiType = SD.ApiType.DELETE,
+                    Url = SD.CouponAPIBase + "/api/coupon/" + id
+                };
+                return await _baseService.SendAsync(Request);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         public async Task<ResponseDto?> GetAllCouponsAsync()
