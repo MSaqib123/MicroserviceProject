@@ -11,5 +11,7 @@ namespace Mango.Web.Models
             PUT,
             DELETE
         }
+
+        public static string CouponAPIBase { get; set; }
     }
 }
