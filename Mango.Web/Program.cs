@@ -64,7 +64,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("JwtBearer", options =>
 {
-    // 🛠️ Configure JWT token validation here
+     🛠️ Configure JWT token validation here
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -72,7 +72,7 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
 
-        // 👇 Replace with your actual values
+         👇 Replace with your actual values
         ValidIssuer = "https://yourdomain.com",
         ValidAudience = "https://yourdomain.com",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyHere"))

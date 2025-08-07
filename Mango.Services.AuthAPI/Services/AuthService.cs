@@ -41,6 +41,7 @@ namespace Mango.Services.AuthAPI.Services
                 {
                     await _roleManager.CreateAsync(new IdentityRole(roleName));//.GetAwaiter().GetResult();
                 }
+                await _userManager.AddToRoleAsync(user, roleName);
                 return true;
             }
             else
@@ -51,7 +52,7 @@ namespace Mango.Services.AuthAPI.Services
 
         public async Task<LoginResponseDto> Login(LoginRequestDto dto)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName == dto.UserName);
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == dto.UserName.ToLower());
             bool isValid = await _userManager.CheckPasswordAsync(user,dto.Password);
             if(!isValid || user == null)
             {
