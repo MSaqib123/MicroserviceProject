@@ -2,7 +2,7 @@
 using Mango.Web.Service.IService;
 using Mango.Web.Services.IServices;
 
-namespace Mango.Web.Service
+namespace Mango.Web.Services
 {
     public class AuthService : IAuthService
     {

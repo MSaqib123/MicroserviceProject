@@ -8,7 +8,7 @@ using System.Text;
 using System.Xml.Linq;
 using static Mango.Web.Models.SD;
 
-namespace Mango.Web.Service
+namespace Mango.Web.Services
 {
     public class BaseService : IBaseService
     {
