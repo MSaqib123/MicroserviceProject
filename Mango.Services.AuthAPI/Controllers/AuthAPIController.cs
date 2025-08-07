@@ -1,7 +1,10 @@
 using AutoMapper;
 using Mango.Services.AuthAPI.Data;
+using Mango.Services.AuthAPI.Models.Dto;
+using Mango.Services.AuthAPI.Services.IServices;
 using Mango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Xml;
 
 namespace Mango.Services.AuthAPI.Controllers
@@ -10,30 +13,38 @@ namespace Mango.Services.AuthAPI.Controllers
     [Route("api/Auth")]
     public class AuthAPIController : ControllerBase
     {
-        private readonly AppDbContext _db;
+        private readonly IAuthService _authService;
         private ResponseDto _response;
-        private readonly IMapper _mapper;
         
-        public AuthAPIController(AppDbContext db, IMapper mapper)
+        public AuthAPIController( 
+            IAuthService authService)
         {
-            _db = db;
+            _authService = authService;
             _response = new ResponseDto();
-            _mapper = mapper;
         }
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDto dto)
         {
             try
             {
-                return Ok();
+                var errorMessage = await _authService.Register(dto);
+                if (!errorMessage.IsNullOrEmpty())
+                {
+                    _response.Message = errorMessage;
+                    _response.IsSuccess = false;
+                    return BadRequest(_response);
+                }
+
+                _response.Message = "User Created Successfully";
+                return Ok(_response);
             }
             catch (Exception ex)
             {
                 _response.Message = ex.Message;
                 _response.IsSuccess = false;
-                return NotFound();
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
