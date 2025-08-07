@@ -1,6 +1,7 @@
 using AutoMapper;
 using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models.Dto;
+using Mango.Services.AuthAPI.Services;
 using Mango.Services.AuthAPI.Services.IServices;
 using Mango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Mango.Services.AuthAPI.Controllers
         private readonly IAuthService _authService;
         private ResponseDto _response;
         
-        public AuthAPIController( 
+        public AuthAPIController(
             IAuthService authService)
         {
             _authService = authService;

@@ -34,6 +34,8 @@ namespace Mango.Services.AuthAPI.Services
                 return new LoginResponseDto() { User=null,Token=""};
             }
 
+            // if user exist  then create JWT token
+
             UserDto userDto = new()
             {
                 Email = user.Email,

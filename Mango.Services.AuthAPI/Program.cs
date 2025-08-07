@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.Configure<JwtOption>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenGenerator, IJwtTokenGenerator>();
 
 // Add services to the container.
 
