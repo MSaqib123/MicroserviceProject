@@ -93,4 +93,37 @@ namespace Mango.Services.AuthAPI.Services
             return tokenHandler.WriteToken(token);
         }
     }
+
+
+
+
+
+    /*
+        🧠 THE SIMPLE ANSWER
+        ✅ GenerateToken()
+        ➡️ Creates a JWT token on the server during login
+        ➡️ Token includes user info (claims), so we can send it securely to the client
+
+        ✅ SignInUser()
+        ➡️ Reads that token back on the client or front-end side (like in MVC app or web frontend)
+        ➡️ Extracts the info (claims) from that token and logs in the user using cookies
+
+        🧩 So what’s the relationship?
+        GenerateToken() happens on the Auth API / server side when the user logs in
+        SignInUser() happens on the client/web app side after receiving the token
+
+        They work together like this:
+
+        🔁 Login Flow Step-by-Step:
+        Step	What Happens	                        Code Involved
+        1️⃣	    User logs in (POST: /login) 	        Frontend or UI sends login info
+        2️⃣	    Server checks credentials	            In AuthAPI (e.g., using Identity)
+        3️⃣	    Server creates JWT token	            ✅ JwtTokenGenerator.GenerateToken()
+        4️⃣	    Server sends back the token 	        Like: { token: "eyJhb..." }
+        5️⃣	    Client receives the token	            LoginResponseDto has .Token
+        6️⃣	    Client reads token & signs in	        ✅ SignInUser(model)
+        7️⃣	    Now client is logged in via cookie
+
+
+     */
 }
