@@ -50,17 +50,26 @@ namespace Mango.Services.AuthAPI.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(int id)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
         {
             try
             {
-                return Ok();
+                var responseDto = await _authService.Login(dto);
+
+                if (responseDto.User == null)
+                {
+                    _response.Message = "Username and Password is invalid";
+                    _response.IsSuccess = false;
+                    return BadRequest(_response);
+                }
+
+                return Ok(responseDto);
             }
             catch (Exception ex)
             {
                 _response.Message = ex.Message;
                 _response.IsSuccess = false;
-                return NotFound();
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
         }
