@@ -63,8 +63,8 @@ namespace Mango.Services.AuthAPI.Controllers
                     _response.IsSuccess = false;
                     return BadRequest(_response);
                 }
-
-                return Ok(responseDto);
+                _response.Result = responseDto;
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -74,7 +74,6 @@ namespace Mango.Services.AuthAPI.Controllers
             }
 
         }
-
 
 
         [HttpPost("assignRole")]
