@@ -12,15 +12,15 @@ namespace Mango.Services.AuthAPI.Services
         private readonly AppDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        //private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthService(AppDbContext db,
-            //IJwtTokenGenerator jwtTokenGenerator,
+            IJwtTokenGenerator jwtTokenGenerator,
             UserManager<ApplicationUser> userManager, 
             RoleManager<IdentityRole> roleManager)
         {
             _db = db;
-            //_jwtTokenGenerator = jwtTokenGenerator;
+            _jwtTokenGenerator = jwtTokenGenerator;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -35,6 +35,7 @@ namespace Mango.Services.AuthAPI.Services
             }
 
             // if user exist  then create JWT token
+            var jwtToken = _jwtTokenGenerator.GenerateToken(user);
 
             UserDto userDto = new()
             {
@@ -47,7 +48,7 @@ namespace Mango.Services.AuthAPI.Services
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,
-                Token = "",
+                Token = jwtToken,
             };
 
             return loginResponseDto;
