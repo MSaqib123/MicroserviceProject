@@ -77,5 +77,30 @@ namespace Mango.Services.AuthAPI.Controllers
 
 
 
+        [HttpPost("assignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto dto)
+        {
+            try
+            {
+                var result = await _authService.AssignRole(dto.Email,dto.Role);
+                if (!result)
+                {
+                    _response.Message = $"Assigning the role of {dto.Role} to {dto.Email} is Faild";
+                    _response.IsSuccess = false;
+                    return BadRequest(_response);
+                }
+                _response.Message = $"Assigning the role of {dto.Role} to {dto.Email} is Successfully done";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+        }
+
+
     }
 }
