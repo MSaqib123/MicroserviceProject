@@ -30,26 +30,27 @@ namespace Mango.Web.Controllers
             return View(loginrequestdto);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginRequestDto obj)
-        //{
-        //    ResponseDto responseDto = await _authService.LoginAsync(obj);
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequestDto obj)
+        {
+            ResponseDto responseDto = await _authService.LoginAsync(obj);
 
-        //    if (responseDto != null && responseDto.IsSuccess)
-        //    {
-        //        LoginResponseDto loginResponseDto =
-        //            JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(responseDto.Result));
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                LoginResponseDto loginResponseDto =
+                    JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(responseDto.Result));
 
-        //        await SignInUser(loginResponseDto);
-        //        _tokenProvider.SetToken(loginResponseDto.Token);
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    else
-        //    {
-        //        TempData["error"] = responseDto.Message;
-        //        return View(obj);
-        //    }
-        //}
+                await SignInUser(loginResponseDto);
+                TempData["success"] = "Login Successfully";
+                //_tokenProvider.SetToken(loginResponseDto.Token);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                TempData["error"] = responseDto.Message;
+                return View(obj);
+            }
+        }
 
         [HttpGet]
         public IActionResult Register()
