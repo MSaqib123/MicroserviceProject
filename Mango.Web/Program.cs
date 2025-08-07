@@ -29,6 +29,7 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 // Cookie authentication is best for:
 // ✅ Traditional MVC web applications (with views, forms, sessions)
 // ❌ Not ideal for APIs or mobile apps (use JWT instead in those cases)
+
 // ✅ 1. Cookie Authentication (best for MVC web apps
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

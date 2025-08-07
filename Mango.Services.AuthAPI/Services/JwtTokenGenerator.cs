@@ -68,7 +68,7 @@ namespace Mango.Services.AuthAPI.Services
 
 
             //✅ Optional: If you wanted to add roles (like admin, user), you could add them as well using:
-            //claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             //📜 4.Describe the token you want to generate
             /*
