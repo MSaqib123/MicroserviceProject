@@ -52,7 +52,6 @@ builder.Services.AddSwaggerGen(option =>
 });
 #endregion
 
-
 //============= Authentication _ Authoriziation ==============
 #region Authentication _ Authoriziation Pipline
 //var secret = builder.Configuration.GetValue<string>("ApiSettings:Secret") ?? "";

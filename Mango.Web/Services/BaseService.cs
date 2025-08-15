@@ -1,9 +1,11 @@
 ﻿using Mango.Web.Models;
+using Mango.Web.Service.IService;
 using Mango.Web.Services.IServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Newtonsoft.Json;
 using System;
 using System.Net;
+using System.Net.Mime;
 using System.Text;
 using System.Xml.Linq;
 using static Mango.Web.Models.SD;
@@ -13,11 +15,16 @@ namespace Mango.Web.Services
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly ITokenProvider _tokenProvider;
+        public BaseService(
+            IHttpClientFactory httpClientFactory,
+             ITokenProvider tokenProvider)
         {
             //📦 Dependencies
             //This factory creates an HttpClient instance(named "MangoAPI") for making requests.
             _httpClientFactory = httpClientFactory;
+
+            _tokenProvider = tokenProvider;
         }
 
         public async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool withBearer = true)
@@ -33,6 +40,12 @@ namespace Mango.Web.Services
                 //Sets the request URL from the RequestDto
                 HttpRequestMessage message = new();
                 message.Headers.Add("Accept", "application/json");
+                //token
+                if (withBearer)
+                {
+                    var token = _tokenProvider.GetToken();
+                    message.Headers.Add("Authorization", $"Bearer {token}");
+                }
                 message.RequestUri = new Uri(requestDto.Url);
 
                 //📤 Step 3: Add Body (for POST/PUT)
