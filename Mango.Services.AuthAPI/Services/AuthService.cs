@@ -2,7 +2,9 @@
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Services.IServices;
+using Mango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mango.Services.AuthAPI.Services
 {
@@ -48,6 +50,15 @@ namespace Mango.Services.AuthAPI.Services
             {
                 return false;
             }
+        }
+
+
+        public async Task<ResponseDto> GetAllusers()
+        {
+            var user = await _db.ApplicationUsers.ToListAsync();
+            ResponseDto dto = new ResponseDto();
+            dto.Result = user;
+            return dto;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto dto)

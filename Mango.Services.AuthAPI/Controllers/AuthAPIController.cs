@@ -101,5 +101,24 @@ namespace Mango.Services.AuthAPI.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                var result = await _authService.GetAllusers();
+                _response.Result = result;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+                _response.IsSuccess = false;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+        }
+
+
     }
 }
