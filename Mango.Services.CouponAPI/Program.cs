@@ -2,6 +2,7 @@
 using AutoMapper;
 using Mango.Services.CouponAPI;
 using Mango.Services.CouponAPI.Data;
+using Mango.Services.CouponAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,34 +27,40 @@ builder.Services.AddSwaggerGen();
 
 //============= Swagger Customization  ==============
 #region Customize Swagger
-builder.Services.AddSwaggerGen(option =>
-{
-    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference= new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id=JwtBearerDefaults.AuthenticationScheme
-                }
-            }, new string[]{}
-        }
-    });
-});
+builder.AddSwaggerSettings();
+//builder.Services.AddSwaggerGen(option =>
+//{
+//    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+//    {
+//        Name = "Authorization",
+//        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+//        In = ParameterLocation.Header,
+//        Type = SecuritySchemeType.ApiKey,
+//        Scheme = "Bearer"
+//    });
+//    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//        {
+//            new OpenApiSecurityScheme
+//            {
+//                Reference= new OpenApiReference
+//                {
+//                    Type=ReferenceType.SecurityScheme,
+//                    Id=JwtBearerDefaults.AuthenticationScheme
+//                }
+//            }, new string[]{}
+//        }
+//    });
+//});
 #endregion
 
 //============= Authentication _ Authoriziation ==============
 #region Authentication _ Authoriziation Pipline
+builder.AddAppAuthentication();
+
+//===============================
+//============= V1 ==============
+//===============================
 //var secret = builder.Configuration.GetValue<string>("ApiSettings:Secret") ?? "";
 //var issuer = builder.Configuration.GetValue<string>("ApiSettings:Issuer");
 //var audience = builder.Configuration.GetValue<string>("ApiSettings:Audience");
@@ -80,34 +87,38 @@ builder.Services.AddSwaggerGen(option =>
 //    };
 //});
 
-var settingsSection = builder.Configuration.GetSection("ApiSettings");
-var secret = settingsSection.GetValue<string>("Secret") ?? ""; 
-var issuer = settingsSection.GetValue<string>("Issuer") ?? ""; ;
-var audience = settingsSection.GetValue<string>("Audience") ?? ""; ;
-var key = Encoding.ASCII.GetBytes(secret ?? "");
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    // 🛠️ Configure JWT token validation here
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
 
-        // 👇 Replace with your actual values
-        ValidIssuer = issuer,
-        ValidAudience = audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret))
-    };
-});
+//===============================
+//============= V2 ==============
+//===============================
+//var settingsSection = builder.Configuration.GetSection("ApiSettings");
+//var secret = settingsSection.GetValue<string>("Secret") ?? ""; 
+//var issuer = settingsSection.GetValue<string>("Issuer") ?? ""; ;
+//var audience = settingsSection.GetValue<string>("Audience") ?? ""; ;
+//var key = Encoding.ASCII.GetBytes(secret ?? "");
+//builder.Services.AddAuthentication(x =>
+//{
+//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(x =>
+//{
+//    // 🛠️ Configure JWT token validation here
+//    x.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+
+//        // 👇 Replace with your actual values
+//        ValidIssuer = issuer,
+//        ValidAudience = audience,
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret))
+//    };
+//});
 
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 #endregion
 
 var app = builder.Build();
