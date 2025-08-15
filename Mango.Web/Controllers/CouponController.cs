@@ -42,21 +42,28 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CouponDto model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                ResponseDto? response = await _couponService.CreateCouponsAsync(model);
+                if (ModelState.IsValid)
+                {
+                    ResponseDto? response = await _couponService.CreateCouponsAsync(model);
 
-                if (response != null && response.IsSuccess)
-                {
-                    TempData["success"] = "Coupon created successfully";
-                    return RedirectToAction(nameof(Index));
+                    if (response != null && response.IsSuccess)
+                    {
+                        TempData["success"] = "Coupon created successfully";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        TempData["error"] = response?.Message;
+                    }
                 }
-                else
-                {
-                    TempData["error"] = response?.Message;
-                }
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> Delete(int couponId)
