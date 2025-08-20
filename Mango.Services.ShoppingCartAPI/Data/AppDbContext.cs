@@ -1,5 +1,4 @@
-﻿using Mango.Services.ProductAPI.Models;
-using Mango.Services.ShoppingCartAPI.Models;
+﻿using Mango.Services.ShoppingCartAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
