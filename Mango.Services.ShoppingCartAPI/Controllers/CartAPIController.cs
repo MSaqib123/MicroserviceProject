@@ -4,6 +4,7 @@ using Mango.Services.ShoppingCartAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Mango.Services.ShoppingCartAPI.Services.IServices;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
@@ -14,20 +15,21 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
-        //private IProductService _productService;
-        //private ICouponService _couponService;
+        private IProductService _productService;
+        private ICouponService _couponService;
         private IConfiguration _configuration;
         //private readonly IMessageBus _messageBus;
         public CartAPIController(AppDbContext db,
             IMapper mapper,
-            //IProductService productService, ICouponService couponService,
+            IProductService productService,
+            ICouponService couponService,
             //IMessageBus messageBus,
             IConfiguration configuration)
         {
             _db = db;
             //_messageBus = messageBus;
-            //_productService = productService;
-            //_couponService = couponService;
+            _productService = productService;
+            _couponService = couponService;
             this._response = new ResponseDto();
             _mapper = mapper;
             _configuration = configuration;
@@ -125,11 +127,10 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                //IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
-
+                IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
                 foreach (var item in cart.CartDetails)
                 {
-                    //item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
+                    item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
                 _response.Result = cart;
