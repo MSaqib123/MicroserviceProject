@@ -134,7 +134,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
 
-                //apply coupon if any
+                //apply coupon if any copain exist against this coupon
                 if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
                     CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
